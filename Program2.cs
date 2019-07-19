@@ -1,77 +1,58 @@
 using System;
+using QuadraticEquationLibrary;
+//Введите значение a: 2
+//Введите значение b: 3
+//Введите значение c: 3
+//Дискриминант меньше 0, корни невещественные.
+//Для закрытия данного окна нажмите <ВВОД>...
 
-namespace QuadraticEquationLibrary
+//Введите значение a: 2
+//Введите значение b: 6
+//Введите значение c: 4
+//Первый корень равен -1
+//Второй корень равен -2
+//Для закрытия данного окна нажмите<ВВОД>...
+
+namespace QuadraticEquation
 {
-    public class QuadraticSolves : IDisposable
+    internal class Program
     {
-        public double A { get; set; }
-        public double B { get; set; }
-        public double C { get; set; }
-
-        /// <summary>
-        /// Parse inserted double number
-        /// </summary>
-        /// <param name="variable">Char inserted argument</param>
-        /// <returns>Return parsed integer inserted</returns>
-        public double InsertVariable(string variable)
+        private static void Main(string[] args)
         {
-            Console.Write($"Insert value {variable}: ");
-            return double.Parse(Console.ReadLine());
-        }
+            bool isOk = true;           
 
-        /// <summary>
-        /// Calculate first or second root
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
-        /// <param name="root1">Is first root</param>
-        /// <returns>Return root</returns>
-        public double RootValue(bool root1)
-        {
-            if (root1)
+            do
             {
-                return (-B + Math.Sqrt(Discriminant())) / (2 * A);
-            }
-            else
-            {
-                return (-B - Math.Sqrt(Discriminant())) / (2 * A);
-            }
-        }
+                try
+                {
+                    isOk = true;
+                    using (QuadraticSolves q = new QuadraticSolves())
+                    {
+                        q.A = q.InsertVariable("a");
+                        q.B = q.InsertVariable("b");
+                        q.C = q.InsertVariable("c");
 
-        /// <summary>
-        /// Check Discriminant is positive number
-        /// </summary>
-        /// <param name="a">a argument in a∗x2+b∗x+c=0></param>
-        /// <param name="b">b argument in a∗x2+b∗x+c=0</param>
-        /// <param name="c">c argument in a∗x2+b∗x+c=0</param>
-        /// <returns></returns>
-        public bool CheckDiscriminant()
-        {
-            return Discriminant() >= 0;
-        }
+                        if (q.CheckDiscriminant())
+                        {
+                            Console.WriteLine("\nПервый корень {0}", q.RootValue(true));
+                            Console.WriteLine("\nВторой корень {0}", q.RootValue(false));
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n\nС такими параметрами дискриминант меньше 0,\n корни невещественные.");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex + "\n");
+                    isOk = false;
+                }
 
-        /// <summary>
-        /// Calculate Discriminant
-        /// </summary>
-        /// <param name="a">a argument in a∗x2+b∗x+c=0</param>
-        /// <param name="b">b argument in a∗x2+b∗x+c=0</param>
-        /// <param name="c">c argument in a∗x2+b∗x+c=0</param>
-        /// <returns></returns>
-        private double Discriminant()
-        {
-            if(A != 0)
-            return B * B - 4 * A * C;
-            else
-                throw new Exception("A cant be ziro.");
-        }
+            } while (!isOk);
 
-        /// <summary>
-        /// Realize Dispose for IDisposable
-        /// </summary>
-        public void Dispose()
-        {
-            // Console.WriteLine("Dispose()");
+            Console.WriteLine("\nPress any key to continue...");
+            Console.ReadKey();
         }
     }
 }
